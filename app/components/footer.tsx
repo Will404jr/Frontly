@@ -9,7 +9,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-white py-2 md:py-3">
+    <footer className="bg-[#f1efe7] py-2 md:py-3">
       <div className="container flex items-center justify-between gap-2 md:gap-4">
         <div className="text-xs text-muted-foreground hover:text-foreground">
           © 2024 <i>Will the developer,</i> Inc. All rights reserved.

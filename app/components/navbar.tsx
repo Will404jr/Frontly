@@ -8,16 +8,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ChevronDownIcon, LogInIcon } from "./icons";
+import Image from "next/image";
+import logo from "../../public/logo.png";
 
 function Navbar() {
   return (
-    <header className="bg-white text-primary-foreground py-2 px-6 flex items-center justify-between shadow-lg max-w-[1300px] pt-3 mx-20 rounded-lg">
-      <span className="text-lg font-semibold text-green-700">
-        <i>Frontly</i>
+    <header className="bg-[#f1efe7] text-primary-foreground py-2 px-6 flex items-center justify-between shadow-lg pt-3 rounded-lg">
+      <span className="mx-5">
+        <h1 className="text-4xl font-black font-serif">frontly</h1>
       </span>
+      {/* <Image src={logo} alt="logo" width="200" height="150" /> */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 cursor-pointer text-black">
             <Avatar className="h-8 w-8">
               {" "}
               {/* Adjust avatar size here */}
@@ -27,7 +30,7 @@ function Navbar() {
               />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
-            <span className="font-medium">Jinja Road Branch</span>
+            <span className="font-medium text-stone-950">Will Jr</span>
             <ChevronDownIcon className="h-4 w-4" />
           </div>
         </DropdownMenuTrigger>

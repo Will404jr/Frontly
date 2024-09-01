@@ -2,6 +2,7 @@ import Accordian from "./components/accordian";
 import { CalendarDemo } from "./components/calender";
 import Footer from "./components/footer";
 import Navbar from "./components/navbar";
+import News from "./components/news";
 import { ModeToggle } from "./components/theme-toggle";
 
 export default function Home() {
@@ -10,18 +11,21 @@ export default function Home() {
       <Navbar />
       {/* Content Area */}
       <div className="flex flex-grow w-full space-x-6 p-5">
-        <div className="flex flex-col w-1/4 h-full p-4 shadow-lg">
-          {/* Future component will go here */}
+        {/* First Column (News) */}
+        <div className="flex flex-col w-1/4 h-[600px] p-4 shadow-lg overflow-hidden">
+          <div className="flex-grow overflow-y-auto">
+            <News />
+          </div>
         </div>
 
-        {/* Second Column */}
+        {/* Second Column (Accordion) */}
         <div className="flex flex-col items-center flex-grow p-4 shadow-lg">
           <div className="w-full max-w-md h-full">
             <Accordian />
           </div>
         </div>
 
-        {/* Third Column */}
+        {/* Third Column (Calendar) */}
         <div className="flex flex-col w-1/4 h-full p-4 shadow-lg items-center">
           <CalendarDemo />
         </div>

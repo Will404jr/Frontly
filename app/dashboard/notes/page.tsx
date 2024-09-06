@@ -27,7 +27,7 @@ interface Note {
   createdAt: string;
 }
 
-export default function Component() {
+export default function Notes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

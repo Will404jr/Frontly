@@ -53,7 +53,7 @@ const News = () => {
   return (
     <div
       ref={scrollRef}
-      className="flex overflow-x-auto space-x-4 p-4"
+      className="flex overflow-x-auto space-x-4 p-4 bg-slate-50"
       style={{ scrollBehavior: "smooth" }}
     >
       {Array.isArray(data) && data.length > 0 ? (

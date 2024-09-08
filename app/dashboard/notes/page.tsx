@@ -137,13 +137,14 @@ export default function Notes() {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <Card className="mb-8">
+      <Card className="mb-8 bg-slate-50">
         <CardHeader>
           <CardTitle>Create a New Note</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={addNote} className="space-y-4">
             <Input
+              className="bg-white border-none"
               type="text"
               placeholder="Note title"
               value={title}
@@ -151,12 +152,17 @@ export default function Notes() {
               required
             />
             <Textarea
+              className="bg-white border-none"
               placeholder="Note description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
             />
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full bg-[#03addc] border-none hover:bg-[#03addc]"
+              disabled={loading}
+            >
               {loading ? (
                 <Loader className="mr-2 h-4 w-4 animate-spin" />
               ) : (
@@ -170,7 +176,7 @@ export default function Notes() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {notes.map((note) => (
-          <Card key={note._id}>
+          <Card key={note._id} className="bg-slate-50">
             <CardHeader>
               <CardTitle>{note.title}</CardTitle>
             </CardHeader>
@@ -180,7 +186,11 @@ export default function Notes() {
             <CardFooter className="flex justify-between">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" onClick={() => editNote(note)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => editNote(note)}
+                    className="bg-[#0d6efd] text-white"
+                  >
                     <Edit className="mr-2 h-4 w-4" /> Edit
                   </Button>
                 </DialogTrigger>
@@ -202,7 +212,11 @@ export default function Notes() {
                       onChange={(e) => setDescription(e.target.value)}
                       rows={4}
                     />
-                    <Button type="submit" className="w-full" disabled={loading}>
+                    <Button
+                      type="submit"
+                      className="w-full bg-[#03addc] hover:bg-[#03addc]"
+                      disabled={loading}
+                    >
                       {loading ? (
                         <Loader className="mr-2 h-4 w-4 animate-spin" />
                       ) : (
@@ -216,6 +230,7 @@ export default function Notes() {
                 variant="destructive"
                 onClick={() => deleteNote(note._id)}
                 disabled={deletingId === note._id}
+                className="bg-[#dc3545] text-white"
               >
                 {deletingId === note._id ? (
                   <Loader className="mr-2 h-4 w-4 animate-spin" />

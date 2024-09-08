@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+      <Card className="col-span-1 md:col-span-2 lg:col-span-3 bg-slate-50 mt-5">
         <CardHeader>
           <CardTitle>News Feed</CardTitle>
           <CardDescription>
@@ -52,7 +52,7 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5">
         <CardHeader>
           <CardTitle>To-Do List</CardTitle>
           <CardDescription>Manage your daily tasks</CardDescription>
@@ -68,7 +68,13 @@ const Home = () => {
                 {todos.map((todo) => (
                   <tr key={todo._id}>
                     <td className="pr-4">{todo.text}</td>
-                    <td>{todo.completed ? "Completed" : "Not Completed"}</td>
+                    <td
+                      className={`${
+                        todo.completed ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {todo.completed ? "Completed" : "Not Completed"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -79,7 +85,7 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5">
         <CardHeader>
           <CardTitle>Notes</CardTitle>
           <CardDescription>Available notes</CardDescription>
@@ -89,7 +95,7 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5">
         <CardHeader>
           <CardTitle>Finance</CardTitle>
           <CardDescription>Overview of your personal finances</CardDescription>

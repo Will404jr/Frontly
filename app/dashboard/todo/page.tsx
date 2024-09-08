@@ -154,9 +154,11 @@ export default function Todo() {
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add a new todo"
-          className="flex-grow"
+          className="flex-grow bg-white border-none"
         />
-        <Button onClick={addTodo}>Add</Button>
+        <Button onClick={addTodo} className="bg-[#03addc] p-3">
+          Add
+        </Button>
       </div>
       <ul className="space-y-2">
         {todos

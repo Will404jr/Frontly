@@ -135,7 +135,7 @@ export default function Finance() {
         <div className="text-center text-gray-500">{loadingMessage}</div>
       )}
 
-      <Card className="mx-auto shadow-lg w-full">
+      <Card className="mx-auto shadow-lg w-full bg-slate-50">
         <CardHeader className="bg-blue-600 text-white p-4 rounded-t-lg">
           <CardTitle className="text-lg font-semibold">
             Add New Transaction
@@ -180,7 +180,7 @@ export default function Finance() {
             />
             <Button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+              className="w-full bg-[#03addc] hover:bg-[#03addc] text-black py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#03addc] focus:ring-opacity-50"
               disabled={loading}
             >
               <Plus className="mr-2 h-4 w-4" /> Add Transaction
@@ -190,7 +190,7 @@ export default function Finance() {
       </Card>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+        <Card className="bg-slate-50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Income</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -201,7 +201,7 @@ export default function Finance() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-slate-50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Expenses
@@ -214,7 +214,7 @@ export default function Finance() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-slate-50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Balance</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -231,7 +231,7 @@ export default function Finance() {
         </Card>
       </div>
 
-      <Card>
+      <Card className="bg-slate-50">
         <CardHeader>
           <CardTitle>Recent Transactions</CardTitle>
         </CardHeader>
@@ -274,8 +274,9 @@ export default function Finance() {
                         size="icon"
                         onClick={() => deleteTransaction(transaction._id)}
                         disabled={loading}
+                        className="bg-red-600 border-none"
                       >
-                        <Trash2 className="h-4 w-4 text-red-600" />
+                        <Trash2 className="h-4 w-4 text-white" />
                       </Button>
                     </TableCell>
                   </TableRow>

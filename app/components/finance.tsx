@@ -47,7 +47,7 @@ export default function Finance() {
   );
 
   return (
-    <Card className="w-full max-w-xl p-6 grid gap-6">
+    <Card className="w-full max-w-xl p-6 grid gap-6 bg-slate-50">
       {loading && <div>Loading...</div>}
       {!loading && (
         <div className="grid gap-4">

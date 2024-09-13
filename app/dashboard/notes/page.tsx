@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ interface Note {
 }
 
 export default function Notes() {
+  const { data: session } = useSession(); // Get the user session
   const [notes, setNotes] = useState<Note[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -35,11 +37,14 @@ export default function Notes() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
 
-  // Fetch notes from the server
+  // Fetch notes from the server based on the user's email
   const fetchNotes = async () => {
+    if (!session?.user?.email) return; // Ensure the user is logged in
     setLoading(true);
     try {
-      const response = await fetch("/api/notes/getNotes");
+      const response = await fetch(
+        `/api/notes/getNotes?email=${session.user.email}`
+      );
       const data = await response.json();
       setNotes(data.notes);
     } catch (error) {
@@ -50,13 +55,20 @@ export default function Notes() {
   };
 
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    if (session?.user?.email) {
+      fetchNotes();
+    }
+  }, [session?.user?.email]);
 
   // Create a new note
   const addNote = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() === "" || description.trim() === "") return;
+    if (
+      !session?.user?.email ||
+      title.trim() === "" ||
+      description.trim() === ""
+    )
+      return;
 
     setLoading(true);
     try {
@@ -136,7 +148,7 @@ export default function Notes() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-4xl mx-auto p-4 text-black">
       <Card className="mb-8 bg-slate-50">
         <CardHeader>
           <CardTitle>Create a New Note</CardTitle>
@@ -174,75 +186,83 @@ export default function Notes() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {notes.map((note) => (
-          <Card key={note._id} className="bg-slate-50">
-            <CardHeader>
-              <CardTitle>{note.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="whitespace-pre-wrap">{note.description}</p>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    onClick={() => editNote(note)}
-                    className="bg-[#0d6efd] text-white"
-                  >
-                    <Edit className="mr-2 h-4 w-4" /> Edit
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white">
-                  <DialogHeader>
-                    <DialogTitle>Edit Note</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={updateNote} className="space-y-4">
-                    <Input
-                      type="text"
-                      placeholder="Note title"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      required
-                    />
-                    <Textarea
-                      placeholder="Note description"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      rows={4}
-                    />
+      {loading ? (
+        <div className="flex justify-center items-center py-8">
+          <Loader className="animate-spin h-8 w-8 text-[#03addc]" />
+        </div>
+      ) : notes.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">No notes found</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {notes.map((note) => (
+            <Card key={note._id} className="bg-slate-50">
+              <CardHeader>
+                <CardTitle>{note.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="whitespace-pre-wrap">{note.description}</p>
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Dialog>
+                  <DialogTrigger asChild>
                     <Button
-                      type="submit"
-                      className="w-full bg-[#03addc] hover:bg-[#03addc]"
-                      disabled={loading}
+                      variant="outline"
+                      onClick={() => editNote(note)}
+                      className="bg-[#0d6efd] text-white"
                     >
-                      {loading ? (
-                        <Loader className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        "Update Note"
-                      )}
+                      <Edit className="mr-2 h-4 w-4" /> Edit
                     </Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
-              <Button
-                variant="destructive"
-                onClick={() => deleteNote(note._id)}
-                disabled={deletingId === note._id}
-                className="bg-[#dc3545] text-white"
-              >
-                {deletingId === note._id ? (
-                  <Loader className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Trash2 className="mr-2 h-4 w-4" />
-                )}
-                Delete
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+                  </DialogTrigger>
+                  <DialogContent className="bg-white">
+                    <DialogHeader>
+                      <DialogTitle>Edit Note</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={updateNote} className="space-y-4">
+                      <Input
+                        type="text"
+                        placeholder="Note title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                      />
+                      <Textarea
+                        placeholder="Note description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        rows={4}
+                      />
+                      <Button
+                        type="submit"
+                        className="w-full bg-[#03addc] hover:bg-[#03addc]"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <Loader className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          "Update Note"
+                        )}
+                      </Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+                <Button
+                  variant="destructive"
+                  onClick={() => deleteNote(note._id)}
+                  disabled={deletingId === note._id}
+                  className="bg-[#dc3545] text-white"
+                >
+                  {deletingId === note._id ? (
+                    <Loader className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Trash2 className="mr-2 h-4 w-4" />
+                  )}
+                  Delete
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

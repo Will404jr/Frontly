@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <Card className="col-span-1 md:col-span-2 lg:col-span-3 bg-slate-50 mt-5">
+      <Card className="col-span-1 md:col-span-2 lg:col-span-3 bg-slate-50 mt-5 text-black">
         <CardHeader>
           <CardTitle>News Feed</CardTitle>
           <CardDescription>
@@ -52,7 +52,7 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5">
+      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
         <CardHeader>
           <CardTitle>To-Do List</CardTitle>
           <CardDescription>Manage your daily tasks</CardDescription>
@@ -85,7 +85,7 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5">
+      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
         <CardHeader>
           <CardTitle>Notes</CardTitle>
           <CardDescription>Available notes</CardDescription>
@@ -95,7 +95,7 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5">
+      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
         <CardHeader>
           <CardTitle>Finance</CardTitle>
           <CardDescription>Overview of your personal finances</CardDescription>

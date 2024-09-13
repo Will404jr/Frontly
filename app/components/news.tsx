@@ -68,7 +68,9 @@ const News = () => {
                 />
               )}
               <a href={story.url} target="_blank" rel="noopener noreferrer">
-                <h2 className="font-bold text-lg text-center">{story.title}</h2>
+                <h2 className="font-bold text-lg text-black text-center">
+                  {story.title}
+                </h2>
               </a>
             </div>
           </div>

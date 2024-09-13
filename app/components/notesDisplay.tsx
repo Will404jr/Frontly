@@ -32,12 +32,12 @@ export default function NotesDisplay() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-slate-50">
+    <div className="max-w-4xl mx-auto p-4 bg-slate-50 text-black">
       {loading ? (
         <div className="flex justify-center items-center">
           <Loader className="h-6 w-6 animate-spin" />
         </div>
-      ) : notes.length === 0 ? (
+      ) : notes?.length === 0 ? (
         <p className="text-center">No notes available.</p>
       ) : (
         <ul className="space-y-4">

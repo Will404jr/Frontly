@@ -22,7 +22,7 @@ export default function Finance() {
       try {
         const res = await fetch("/api/financeTracker");
         const data = await res.json();
-        setTransactions(data);
+        setTransactions(data); // Ensure that 'data' matches the 'Transaction[]' type
       } catch (error) {
         console.error("Failed to fetch transactions:", error);
       } finally {
@@ -35,7 +35,7 @@ export default function Finance() {
 
   const calculateTotal = (type: "income" | "expense") => {
     return transactions
-      .filter((t) => t.type === type)
+      .filter((t: Transaction) => t.type === type) // Explicitly declare 't' as 'Transaction'
       .reduce((sum, t) => sum + t.amount, 0)
       .toFixed(2);
   };
@@ -47,7 +47,7 @@ export default function Finance() {
   );
 
   return (
-    <Card className="w-full max-w-xl p-6 grid gap-6 bg-slate-50">
+    <Card className="w-full max-w-xl p-6 grid gap-6 bg-slate-50 text-black">
       {loading && <div>Loading...</div>}
       {!loading && (
         <div className="grid gap-4">

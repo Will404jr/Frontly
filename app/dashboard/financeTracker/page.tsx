@@ -130,7 +130,7 @@ export default function Finance() {
   ).toFixed(2);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-8">
+    <div className="max-w-4xl mx-auto p-4 space-y-8 text-black">
       {loading && (
         <div className="text-center text-gray-500">{loadingMessage}</div>
       )}
@@ -222,7 +222,7 @@ export default function Finance() {
           <CardContent>
             <div
               className={`text-2xl font-bold ${
-                parseFloat(balance) >= 0 ? "text-green-600" : "text-red-600"
+                parseFloat(balance) >= 0 ? "text-blue-600" : "text-red-600"
               }`}
             >
               ${balance}

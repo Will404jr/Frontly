@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/MongodbClient";
+import { getServerSession } from "next-auth"; // Import getServerSession
+import { authOptions } from "@/lib/authOptions"; // Import your authOptions
 import { ObjectId } from "mongodb";
 
 // Create a new transaction
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+
+    // Ensure user is logged in
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { type, amount, category, date } = await request.json();
 
     // Validate input
@@ -17,10 +26,11 @@ export async function POST(request: Request) {
 
     // Connect to the database
     const client = await clientPromise;
-    const db = client.db("Next-app"); // Replace with your actual database name
+    const db = client.db("Next-app");
 
-    // Insert the transaction
+    // Insert the transaction into the "transactions" collection with user's email
     const result = await db.collection("transactions").insertOne({
+      email: session.user.email,
       type,
       amount: parseFloat(amount),
       category,
@@ -44,14 +54,24 @@ export async function POST(request: Request) {
   }
 }
 
-// Get all transactions
-export async function GET() {
+// Get all transactions for the logged-in user
+export async function GET(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+
+    // Ensure user is logged in
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const client = await clientPromise;
     const db = client.db("Next-app");
 
-    // Retrieve all transactions
-    const transactions = await db.collection("transactions").find().toArray();
+    // Retrieve all transactions for the logged-in user
+    const transactions = await db
+      .collection("transactions")
+      .find({ email: session.user.email })
+      .toArray();
 
     return NextResponse.json(transactions, { status: 200 });
   } catch (error) {
@@ -66,6 +86,13 @@ export async function GET() {
 // Delete a transaction
 export async function DELETE(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+
+    // Ensure user is logged in
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await request.json();
 
     if (!id) {
@@ -81,11 +108,11 @@ export async function DELETE(request: Request) {
     // Delete the transaction
     const result = await db
       .collection("transactions")
-      .deleteOne({ _id: new ObjectId(id) });
+      .deleteOne({ _id: new ObjectId(id), email: session.user.email });
 
     if (result.deletedCount === 0) {
       return NextResponse.json(
-        { error: "Transaction not found" },
+        { error: "Transaction not found or unauthorized" },
         { status: 404 }
       );
     }

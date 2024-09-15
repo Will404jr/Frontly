@@ -48,3 +48,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to save todo" }, { status: 500 });
   }
 }
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const date = searchParams.get("date");
+
+  if (!date) {
+    return NextResponse.json({ error: "Date is required" }, { status: 400 });
+  }
+
+  try {
+    const client = await clientPromise;
+    const db = client.db("Next-app");
+    const todos = await db.collection("todos").find({ date }).toArray();
+
+    return NextResponse.json({ todos }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch todos" },
+      { status: 500 }
+    );
+  }
+}

@@ -23,24 +23,24 @@ export default function Component() {
   const [loading, setLoading] = useState<boolean>(false);
   const [todoDates, setTodoDates] = useState<Date[]>([]);
 
-  // Helper function to format dates as yyyy-mm-dd
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-CA");
   };
 
-  // Fetch todos for the selected date
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchTodos = async (date: string) => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `/api/todos?date=${formatDate(selectedDate)}`
-        );
-        if (!response.ok) {
+        const res = await fetch(`/api/todos?date=${date}`, {
+          method: "GET",
+        });
+
+        if (!res.ok) {
           throw new Error("Failed to fetch todos");
         }
-        const data = await response.json();
-        setTodos(data); // Directly set fetched todos
+
+        const data = await res.json();
+        setTodos(data.todos);
       } catch (error) {
         console.error("Error fetching todos:", error);
       } finally {
@@ -48,10 +48,9 @@ export default function Component() {
       }
     };
 
-    fetchTodos();
-  }, [selectedDate]); // Fetch todos whenever selectedDate changes
+    fetchTodos(formatDate(selectedDate));
+  }, [selectedDate]);
 
-  // Fetch all dates that have todos to highlight them in the calendar
   useEffect(() => {
     const fetchTodoDates = async () => {
       try {
@@ -60,7 +59,7 @@ export default function Component() {
           throw new Error("Failed to fetch todo dates");
         }
         const data = await response.json();
-        const parsedDates = data.map((todoDate: string) => new Date(todoDate)); // Parse string dates to Date objects
+        const parsedDates = data.map((todoDate: string) => new Date(todoDate));
         setTodoDates(parsedDates);
       } catch (error) {
         console.error("Error fetching todo dates:", error);
@@ -70,7 +69,6 @@ export default function Component() {
     fetchTodoDates();
   }, []);
 
-  // Add a new todo
   const addTodo = async () => {
     if (newTodo.trim() !== "") {
       const tempId = `${Date.now()}`;
@@ -121,7 +119,6 @@ export default function Component() {
     }
   };
 
-  // Toggle todo completion
   const toggleTodo = async (id: string) => {
     const todoToUpdate = todos.find((todo) => todo._id === id);
 
@@ -152,13 +149,12 @@ export default function Component() {
       }
     } catch (error) {
       console.error("Error updating todo:", error);
-      setTodos(todos); // Revert changes on failure
+      setTodos(todos);
     } finally {
       setLoading(false);
     }
   };
 
-  // Delete a todo
   const deleteTodo = async (id: string) => {
     const filteredTodos = todos.filter((todo) => todo._id !== id);
     setTodos(filteredTodos);
@@ -182,15 +178,15 @@ export default function Component() {
       }
     } catch (error) {
       console.error("Error deleting todo:", error);
-      setTodos(todos); // Revert changes on failure
+      setTodos(todos);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 text-black flex">
-      <div className="w-2/3 pr-4">
+    <div className="max-w-4xl mx-auto mt-8 text-black flex flex-col-reverse sm:flex-row">
+      <div className="w-full sm:w-2/3 pr-0 sm:pr-4">
         <h1 className="text-2xl font-bold mb-4">Todo List</h1>
         <div className="flex space-x-2 mb-4">
           <Input
@@ -245,21 +241,21 @@ export default function Component() {
           </ul>
         )}
       </div>
-      <div className="w-1/3 pl-4 border-l border-border">
+      <div className="w-full sm:w-1/3 sm:pl-4 border-t sm:border-l border-border sm:border-t-0 mt-4 sm:mt-0 order-first sm:order-none">
         <DayPicker
           mode="single"
           selected={selectedDate}
           onSelect={(date) => date && setSelectedDate(date)}
           modifiers={{
-            hasTodo: todoDates, // Highlight dates that have todos
+            hasTodo: todoDates,
           }}
           modifiersStyles={{
             hasTodo: {
-              backgroundColor: "#6366F1", // Highlighted background color (hex code)
-              color: "#FFFFFF", // Foreground color (white)
+              backgroundColor: "#6366F1",
+              color: "#FFFFFF",
             },
           }}
-          className="bg-background p-4 rounded-lg"
+          className="bg-background p-4 rounded-lg w-full sm:w-auto sm:max-w-[16rem]" // Wider on small screens, limit width on larger screens
         />
       </div>
     </div>

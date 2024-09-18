@@ -37,7 +37,6 @@ export default function OrganizedFlexibleStickyNotes() {
   const textAreaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>(
     {}
   );
-  const noteContentBackup = useRef<{ [key: string]: string }>({});
 
   useEffect(() => {
     fetchNotes();
@@ -46,11 +45,8 @@ export default function OrganizedFlexibleStickyNotes() {
   const fetchNotes = async () => {
     try {
       const response = await fetch("/api/stickynotes");
-      if (!response.ok) {
-        throw new Error("Failed to fetch notes");
-      }
       const data = await response.json();
-      setNotes(data);
+      setNotes(data.notes);
     } catch (error) {
       console.error("Failed to fetch notes:", error);
     }
@@ -64,7 +60,7 @@ export default function OrganizedFlexibleStickyNotes() {
         tags: newNoteTags
           .split(",")
           .map((tag) => tag.trim())
-          .filter((tag) => tag !== ""), // Ensure tags are properly formatted
+          .filter((tag) => tag !== ""),
       };
 
       try {
@@ -75,11 +71,8 @@ export default function OrganizedFlexibleStickyNotes() {
           },
           body: JSON.stringify(newNote),
         });
-        if (!response.ok) {
-          throw new Error("Failed to add note");
-        }
         const result = await response.json();
-        setNotes([...notes, { ...newNote, _id: result.id }]);
+        setNotes([...notes, { ...newNote, _id: result.noteId }]);
         setNewNoteContent("");
         setNewNoteTags("");
         setIsDialogOpen(false);
@@ -91,16 +84,9 @@ export default function OrganizedFlexibleStickyNotes() {
 
   const deleteNote = async (id: string) => {
     try {
-      const response = await fetch(`/api/stickynotes`, {
+      await fetch(`/api/stickynotes/${id}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
       });
-      if (!response.ok) {
-        throw new Error("Failed to delete note");
-      }
       setNotes(notes.filter((note) => note._id !== id));
     } catch (error) {
       console.error("Failed to delete note:", error);
@@ -110,19 +96,16 @@ export default function OrganizedFlexibleStickyNotes() {
   const updateNote = async (id: string, newContent: string) => {
     try {
       const updatedNote = {
-        id,
         content: newContent,
       };
-      const response = await fetch(`/api/stickynotes`, {
-        method: "PUT",
+      await fetch(`/api/stickynotes/${id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedNote),
       });
-      if (!response.ok) {
-        throw new Error("Failed to update note");
-      }
+
       setNotes(
         notes.map((note) =>
           note._id === id ? { ...note, content: newContent } : note
@@ -138,16 +121,6 @@ export default function OrganizedFlexibleStickyNotes() {
     if (textarea) {
       textarea.style.height = "auto";
       textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  };
-
-  const handleFocus = (id: string, content: string) => {
-    noteContentBackup.current[id] = content; // Store original content on focus
-  };
-
-  const handleBlur = (id: string, content: string) => {
-    if (content !== noteContentBackup.current[id]) {
-      updateNote(id, content); // Update note only if content changed
     }
   };
 
@@ -190,13 +163,13 @@ export default function OrganizedFlexibleStickyNotes() {
               </div>
               <div>
                 <label
-                  htmlFor="tags"
+                  htmlFor="note-tags"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Tags (comma-separated)
                 </label>
                 <Input
-                  id="tags"
+                  id="note-tags"
                   type="text"
                   value={newNoteTags}
                   onChange={(e) => setNewNoteTags(e.target.value)}
@@ -219,24 +192,21 @@ export default function OrganizedFlexibleStickyNotes() {
               ref={(el) => {
                 textAreaRefs.current[note._id] = el;
               }}
-              defaultValue={note.content}
-              onFocus={() => handleFocus(note._id, note.content)}
-              onBlur={(e) => handleBlur(note._id, e.target.value)}
+              value={note.content}
+              onChange={(e) => {
+                updateNote(note._id, e.target.value);
+                adjustTextareaHeight(note._id);
+              }}
               className="w-full bg-transparent resize-none focus:outline-none mb-2 flex-grow"
               style={{ minHeight: "80px", overflow: "hidden" }}
             />
             <div className="flex flex-wrap gap-2 mt-2">
-              {note.tags && Array.isArray(note.tags) && note.tags.length > 0 ? (
-                note.tags.map((tag, index) => (
-                  <Badge key={index} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))
-              ) : (
-                <p className="text-gray-500">No tags</p>
-              )}
+              {note.tags.map((tag, index) => (
+                <Badge key={index} variant="secondary">
+                  {tag}
+                </Badge>
+              ))}
             </div>
-
             <Button
               variant="ghost"
               size="icon"

@@ -1,81 +1,120 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/MongodbClient";
-import { getServerSession } from "next-auth"; // Import getServerSession
-import { authOptions } from "@/lib/authOptions"; // Import your authOptions
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import { ObjectId } from "mongodb";
 
-// Create a new sticky note
-export async function POST(request: Request) {
+async function connectToDatabase() {
+  const client = await clientPromise;
+  return client.db("Next-app").collection("stickies");
+}
+
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    // Ensure user is logged in
-    if (!session || !session.user?.email) {
+    // Check if session or session.user is undefined
+    if (!session || !session.user || !session.user.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { content, color, tags } = await request.json();
-
-    // Validate input
-    if (!content || !color) {
-      return NextResponse.json(
-        { error: "Content and color are required" },
-        { status: 400 }
-      );
-    }
-
-    // Connect to the database
-    const client = await clientPromise;
-    const db = client.db("Next-app");
-
-    // Insert the new sticky note into the "sticky_notes" collection with user's email
-    const result = await db.collection("sticky_notes").insertOne({
-      email: session.user.email,
-      content,
-      color,
-      tags: tags || [],
-      createdAt: new Date(),
-    });
-
-    return NextResponse.json(
-      {
-        message: "Sticky note saved successfully",
-        noteId: result.insertedId,
-      },
-      { status: 201 }
-    );
+    const collection = await connectToDatabase();
+    const notes = await collection
+      .find({ email: session.user.email })
+      .toArray();
+    return NextResponse.json(notes);
   } catch (error) {
-    console.error("Failed to save sticky note:", error);
     return NextResponse.json(
-      { error: "Failed to save sticky note" },
+      { error: "Failed to fetch notes" },
       { status: 500 }
     );
   }
 }
 
-// Fetch sticky notes for the logged-in user
-export async function GET(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    // Ensure user is logged in
-    if (!session || !session.user?.email) {
+    // Check if session or session.user is undefined
+    if (!session || !session.user || !session.user.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const client = await clientPromise;
-    const db = client.db("Next-app");
+    const { content, color, tags } = await request.json();
+    const collection = await connectToDatabase();
+    const result = await collection.insertOne({
+      email: session.user.email,
+      content,
+      color,
+      tags,
+      createdAt: new Date(),
+    });
 
-    // Fetch sticky notes for the logged-in user
-    const notes = await db
-      .collection("sticky_notes")
-      .find({ email: session.user.email })
-      .toArray();
-
-    return NextResponse.json({ notes }, { status: 200 });
-  } catch (error) {
-    console.error("Failed to fetch sticky notes:", error);
     return NextResponse.json(
-      { error: "Failed to fetch sticky notes" },
+      { id: result.insertedId, content, color, tags },
+      { status: 201 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to create note" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    // Check if session or session.user is undefined
+    if (!session || !session.user || !session.user.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id, content, tags } = await request.json();
+    const collection = await connectToDatabase();
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id), email: session.user.email },
+      { $set: { content, tags, updatedAt: new Date() } }
+    );
+
+    if (result.matchedCount === 0) {
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Note updated successfully" });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to update note" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    // Check if session or session.user is undefined
+    if (!session || !session.user || !session.user.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = await request.json();
+    const collection = await connectToDatabase();
+    const result = await collection.deleteOne({
+      _id: new ObjectId(id),
+      email: session.user.email,
+    });
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Note deleted successfully" });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to delete note" },
       { status: 500 }
     );
   }

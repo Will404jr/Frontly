@@ -152,10 +152,10 @@ export default function EnhancedMarketingPage() {
                 >
                   <Image
                     alt="ProductivityPro App"
-                    className="w-[40rem] max-w-[48rem] rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-                    height="1442"
                     src="https://res.cloudinary.com/dzuu1kacl/image/upload/v1725829250/frontly_and_3_more_pages_-_Personal_-_Microsoft_Edge_08_09_2024_23_53_08_kv4urv.png"
-                    width="2000"
+                    width={2000}
+                    height={1442}
+                    className="w-[40rem] max-w-[48rem] rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
                   />
                 </motion.div>
               </div>

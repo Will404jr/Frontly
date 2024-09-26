@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
 import RegisterForm from "./form";
 
-const page = async () => {
+const Page = async () => {
   const session = await getServerSession(authOptions);
 
   if (session) {
@@ -22,15 +22,17 @@ const page = async () => {
       </div>
 
       {/* Right side - Image */}
-      <div className="w-1/2 h-full">
+      <div className="w-1/2 h-full relative">
         <Image
-          src="https://res.cloudinary.com/dzuu1kacl/image/upload/v1726061283/4068218_d2jlpi.jpg" // Replace with the correct image path
+          src="https://res.cloudinary.com/dzuu1kacl/image/upload/v1726061283/4068218_d2jlpi.jpg"
           alt="Login Image"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          sizes="50vw"
         />
       </div>
     </section>
   );
 };
 
-export default page;
+export default Page;

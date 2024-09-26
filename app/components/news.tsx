@@ -65,6 +65,8 @@ const News = () => {
                 <Image
                   src={story.multimedia[0].url}
                   alt={story.title}
+                  width={story.multimedia[0].width || 300} // Use width from API or fallback
+                  height={story.multimedia[0].height || 200} // Use height from API or fallback
                   className="mt-2 w-full h-60 object-cover"
                 />
               )}

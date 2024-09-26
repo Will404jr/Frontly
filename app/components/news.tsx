@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 const News = () => {
   const [data, setData] = useState<any[]>([]);
@@ -61,7 +62,7 @@ const News = () => {
           <div key={story.url} className="min-w-[300px] flex-shrink-0">
             <div className="w-60">
               {story.multimedia && story.multimedia.length > 0 && (
-                <img
+                <Image
                   src={story.multimedia[0].url}
                   alt={story.title}
                   className="mt-2 w-full h-60 object-cover"

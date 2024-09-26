@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import clientPromise from "../../../lib/MongodbClient";
+import clientPromise from "@/lib/MongodbClient";
 import { ObjectId } from "mongodb";
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request: any, { params }: any) {
   try {
     const client = await clientPromise;
     const db = client.db("financeTracker");

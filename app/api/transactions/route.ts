@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import clientPromise from "../../../lib/MongodbClient";
+import clientPromise from "@/lib/MongodbClient";
 
 export async function GET() {
   try {
@@ -20,7 +20,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request) {
+export async function POST(request: { json: () => any }) {
   try {
     const client = await clientPromise;
     const db = client.db("financeTracker");

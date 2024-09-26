@@ -2,33 +2,48 @@
 
 import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
-interface Note {
+// Define the structure of a sticky note object
+interface StickyNote {
   _id: string;
-  title: string;
+  email: string;
+  content: string;
+  color: string;
+  tags: string[];
+  createdAt: string;
 }
 
 export default function NotesDisplay() {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<StickyNote[]>([]);
   const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
 
-  // Fetch notes from the server
-  const fetchNotes = async () => {
+  // Fetch notes from the server and extract tags
+  const fetchNotesAndExtractTags = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/notes/getNotes");
+      const response = await fetch("/api/stickynotes");
       const data = await response.json();
-      setNotes(data.notes);
+
+      // Assuming data is an array of sticky notes
+      const fetchedNotes: StickyNote[] = data; // Explicitly typing data as StickyNote[]
+
+      setNotes(fetchedNotes);
+
+      // Extract all tags from all notes and remove duplicates
+      const allTags = fetchedNotes.flatMap((note) => note.tags);
+      const uniqueTags = Array.from(new Set(allTags)); // Remove duplicate tags
+      setTags(uniqueTags);
     } catch (error) {
-      console.error("Failed to fetch notes:", error);
+      console.error("Failed to fetch notes or tags:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchNotes();
+    fetchNotesAndExtractTags();
   }, []);
 
   return (
@@ -37,16 +52,14 @@ export default function NotesDisplay() {
         <div className="flex justify-center items-center">
           <Loader className="h-6 w-6 animate-spin" />
         </div>
-      ) : notes?.length === 0 ? (
-        <p className="text-center">No notes available.</p>
+      ) : tags?.length === 0 ? (
+        <p className="text-center">No tags available.</p>
       ) : (
-        <ul className="space-y-4">
-          {notes.map((note) => (
-            <Card key={note._id} className="hover:shadow-md transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg">{note.title}</CardTitle>
-              </CardHeader>
-            </Card>
+        <ul className="flex flex-wrap gap-2">
+          {tags.map((tag, index) => (
+            <Badge key={index} className="bg-blue-200 text-black p-2 rounded">
+              {tag}
+            </Badge>
           ))}
         </ul>
       )}

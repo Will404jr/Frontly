@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link"; // Import Link from next/link
 import {
   Card,
   CardHeader,
@@ -52,58 +53,68 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
-        <CardHeader>
-          <CardTitle>To-Do List</CardTitle>
-          <CardDescription>Manage your daily tasks</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p>Loading todos...</p>
-          ) : error ? (
-            <p>Error: {error}</p>
-          ) : todos.length > 0 ? (
-            <table className="w-full">
-              <tbody>
-                {todos.map((todo) => (
-                  <tr key={todo._id}>
-                    <td className="pr-4">{todo.text}</td>
-                    <td
-                      className={`${
-                        todo.completed ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {todo.completed ? "Completed" : "Not Completed"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>No todos for today</p>
-          )}
-        </CardContent>
-      </Card>
+      <Link href="/dashboard/financeTracker">
+        <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
+          <CardHeader>
+            <CardTitle>Finance</CardTitle>
+            <CardDescription>
+              Overview of your personal finances
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Finance />
+          </CardContent>
+        </Card>
+      </Link>
 
-      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
-        <CardHeader>
-          <CardTitle>Notes</CardTitle>
-          <CardDescription>Available notes</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <NotesDisplay />
-        </CardContent>
-      </Card>
+      {/* Wrap the Card with Link for To-Do navigation */}
+      <Link href="/dashboard/todo">
+        <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black cursor-pointer">
+          <CardHeader>
+            <CardTitle>To-Do List</CardTitle>
+            <CardDescription>Manage your daily tasks</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <p>Loading todos...</p>
+            ) : error ? (
+              <p>Error: {error}</p>
+            ) : todos.length > 0 ? (
+              <table className="w-full">
+                <tbody>
+                  {todos.map((todo) => (
+                    <tr key={todo._id}>
+                      <td className="pr-4">{todo.text}</td>
+                      <td
+                        className={`${
+                          todo.completed ? "text-green-600" : "text-red-600"
+                        }`}
+                      >
+                        {todo.completed ? "Completed" : "Not Completed"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No todos for today</p>
+            )}
+          </CardContent>
+        </Card>
+      </Link>
 
-      <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
-        <CardHeader>
-          <CardTitle>Finance</CardTitle>
-          <CardDescription>Overview of your personal finances</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Finance />
-        </CardContent>
-      </Card>
+      {/* Wrap the Card with Link for Stickies navigation */}
+      <Link href="/dashboard/notes">
+        <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black cursor-pointer">
+          <CardHeader>
+            <CardTitle>Stickies</CardTitle>
+            <CardDescription>Available tags</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <NotesDisplay />
+          </CardContent>
+        </Card>
+      </Link>
     </div>
   );
 };

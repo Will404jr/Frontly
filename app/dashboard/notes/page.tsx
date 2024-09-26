@@ -161,7 +161,7 @@ export default function OrganizedFlexibleStickyNotes() {
       <div className="mb-4">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full sm:w-auto text-white bg-[#6366f1] rounded-xl">
+            <Button className="w-full sm:w-auto text-white bg-[#6366f1] hover:bg-[#334155] rounded-xl">
               <Plus className="mr-2 h-4 w-4" /> Add New Note
             </Button>
           </DialogTrigger>

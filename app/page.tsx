@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Spinner from "./components/ui/spinner";
 import {
   Accordion,
   AccordionContent,
@@ -79,6 +80,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
 export default function EnhancedMarketingPage() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -117,7 +119,7 @@ export default function EnhancedMarketingPage() {
           className="text-white bg-[#6366f1] p-2 pl-3 pr-3 rounded-xl"
           href="/login"
         >
-          Login
+          {loading ? <Spinner className="w-4 h-4 mr-2" /> : "Login"}
         </Link>
       </header>
       <main className="flex-1">

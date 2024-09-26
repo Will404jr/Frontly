@@ -197,7 +197,7 @@ export default function Finance() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              ${calculateTotal("income")}
+              shs.{calculateTotal("income")}
             </div>
           </CardContent>
         </Card>
@@ -210,7 +210,7 @@ export default function Finance() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              ${calculateTotal("expense")}
+              shs.{calculateTotal("expense")}
             </div>
           </CardContent>
         </Card>
@@ -225,7 +225,7 @@ export default function Finance() {
                 parseFloat(balance) >= 0 ? "text-blue-600" : "text-red-600"
               }`}
             >
-              ${balance}
+              shs.{balance}
             </div>
           </CardContent>
         </Card>
@@ -266,7 +266,7 @@ export default function Finance() {
                     </TableCell>
                     <TableCell>{transaction.category}</TableCell>
                     <TableCell className="text-right">
-                      ${transaction.amount.toFixed(2)}
+                      shs.{transaction.amount.toFixed(2)}
                     </TableCell>
                     <TableCell className="text-right">
                       <Button

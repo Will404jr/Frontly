@@ -157,7 +157,7 @@ export default function OrganizedFlexibleStickyNotes() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-black">Sticky Wall</h1>
+      {/* <h1 className="text-2xl font-bold mb-4 text-black">Sticky Wall</h1> */}
       <div className="mb-4">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>

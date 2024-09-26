@@ -184,6 +184,18 @@ export default function Component() {
     }
   };
 
+  // Function to check if the selected date is in the past
+  const isPastDate = (date: Date) => {
+    const today = new Date(); // Get today's date
+    const selectedDate = new Date(date); // Clone the selected date
+
+    // Set both dates to midnight to remove time component from the comparison
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    return selectedDate < today; // Compare the two dates
+  };
+
   return (
     <div className="max-w-4xl mx-auto mt-8 text-black flex flex-col-reverse sm:flex-row">
       <div className="w-full sm:w-2/3 pr-0 sm:pr-4">
@@ -194,11 +206,12 @@ export default function Component() {
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
             placeholder="Add a new todo"
-            className="flex-grow bg-white border-none"
+            className="flex-grow bg-white rounded-xl"
           />
           <Button
             onClick={addTodo}
-            className="bg-primary text-primary-foreground p-3"
+            className="bg-[#6366f1] text-white p-3 rounded-xl"
+            disabled={isPastDate(selectedDate)} // Disable button if selected date is in the past
           >
             Add
           </Button>
@@ -241,7 +254,7 @@ export default function Component() {
           </ul>
         )}
       </div>
-      <div className="w-full sm:w-1/3 sm:pl-4 border-t sm:border-l border-border sm:border-t-0 mt-4 sm:mt-0 order-first sm:order-none">
+      <div className="w-full sm:w-1/3 sm:pl-4 mt-4 sm:mt-0 order-first sm:order-none">
         <DayPicker
           mode="single"
           selected={selectedDate}
@@ -255,7 +268,7 @@ export default function Component() {
               color: "#FFFFFF",
             },
           }}
-          className="bg-background p-4 rounded-lg w-full sm:w-auto sm:max-w-[16rem]" // Wider on small screens, limit width on larger screens
+          className=" p-4 rounded-lg w-full sm:w-auto sm:max-w-[16rem]" // Wider on small screens, limit width on larger screens
         />
       </div>
     </div>

@@ -101,7 +101,7 @@ export default function Component({ children }: { children: React.ReactNode }) {
                 }`}
               >
                 <CalendarIcon className="h-5 w-5" />
-                Notes
+                Sticky wall
               </Link>
               <Link
                 href="/dashboard/financeTracker"

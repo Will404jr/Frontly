@@ -79,7 +79,7 @@ const LoginForm = () => {
                   className="bg-white border-none"
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-600" />
             </FormItem>
           )}
         />
@@ -96,7 +96,7 @@ const LoginForm = () => {
                   className="bg-white border-none"
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-600" />
             </FormItem>
           )}
         />

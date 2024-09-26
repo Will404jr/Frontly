@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import React from "react";
+import Image from "next/image";
 import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
 import RegisterForm from "./form";
@@ -22,7 +23,7 @@ const page = async () => {
 
       {/* Right side - Image */}
       <div className="w-1/2 h-full">
-        <img
+        <Image
           src="https://res.cloudinary.com/dzuu1kacl/image/upload/v1726061283/4068218_d2jlpi.jpg" // Replace with the correct image path
           alt="Login Image"
           className="w-full h-full object-cover"

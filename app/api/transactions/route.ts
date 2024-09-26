@@ -20,11 +20,12 @@ export async function GET() {
   }
 }
 
-export async function POST(request: { json: () => any }) {
+// Fix the type of the request parameter
+export async function POST(request: Request) {
   try {
     const client = await clientPromise;
     const db = client.db("financeTracker");
-    const body = await request.json();
+    const body = await request.json(); // Parse the JSON body from the request
     const transaction = await db.collection("transactions").insertOne(body);
     return NextResponse.json(transaction);
   } catch (e) {

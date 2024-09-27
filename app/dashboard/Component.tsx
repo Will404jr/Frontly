@@ -135,6 +135,10 @@ export default function Component({ children }: { children: React.ReactNode }) {
               >
                 Logout
               </Button>
+
+              <p className="text-xs text-white">
+                © 2023 frontly. All rights reserved.
+              </p>
             </div>
           </div>
         </div>

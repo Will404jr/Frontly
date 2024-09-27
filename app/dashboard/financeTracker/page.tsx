@@ -189,7 +189,8 @@ export default function Finance() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      {/* Cards for totals */}
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
         <Card className="bg-slate-50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Income</CardTitle>
@@ -231,6 +232,7 @@ export default function Finance() {
         </Card>
       </div>
 
+      {/* Recent transactions */}
       <Card className="bg-slate-50">
         <CardHeader>
           <CardTitle>Recent Transactions</CardTitle>

@@ -13,9 +13,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CheckCircle, Edit3, PieChart, ArrowRight, Check } from "lucide-react";
+import {
+  CheckCircle,
+  Edit3,
+  PieChart,
+  ArrowRight,
+  Check,
+  Menu,
+  X,
+} from "lucide-react";
 import Pricing from "./components/marketingPage/pricing";
 import Contact from "./components/marketingPage/contact";
+import email from "next-auth/providers/email";
 
 // Define the types for the FeatureCard props
 interface FeatureCardProps {
@@ -81,66 +90,108 @@ const PricingCard: React.FC<PricingCardProps> = ({
 export default function EnhancedMarketingPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // For the hamburger menu toggle
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <header className="px-4 lg:px-6 h-16 flex items-center bg-white shadow-sm ml-12 mr-12">
-        <Link
-          className="flex items-center justify-center text-[#6366f1]"
-          href="#"
-        >
+      {/* Header */}
+      <header className="px-4 lg:px-6 h-16 flex items-center bg-white shadow-sm relative">
+        <Link className="flex items-center text-[#6366f1]" href="#">
           <CheckCircle className="h-6 w-6 text-primary" />
           <span className="ml-2 text-2xl font-bold">frontly</span>
         </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6 pr-5 text-black">
-          <Link
-            className="text-sm font-medium hover:text-primary"
-            href="#features"
-          >
-            Features
-          </Link>
-          <Link
-            className="text-sm font-medium hover:text-primary"
-            href="#pricing"
-          >
-            Pricing
-          </Link>
-          <Link className="text-sm font-medium hover:text-primary" href="#faq">
-            FAQ
-          </Link>
-          <Link
-            className="text-sm font-medium hover:text-primary"
-            href="#contact"
-          >
-            Contact us
-          </Link>
+
+        {/* Hamburger Menu Button (Visible on small screens) */}
+        <button
+          className="ml-auto block lg:hidden text-primary"
+          onClick={toggleMenu}
+        >
+          {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+
+        {/* Navbar Links (responsive) */}
+        <nav
+          className={`${
+            menuOpen
+              ? "max-h-[500px] transition-all duration-300 ease-in-out"
+              : "max-h-0 overflow-hidden"
+          } lg:max-h-none lg:flex lg:ml-auto lg:gap-4 lg:flex-row lg:items-center w-full lg:w-auto absolute lg:relative top-16 left-0 lg:top-0 bg-white lg:bg-transparent z-10 lg:z-auto shadow-lg lg:shadow-none`}
+        >
+          <ul className="flex flex-col lg:flex-row lg:items-center gap-4 p-4 lg:p-0">
+            <li>
+              <Link
+                className="text-sm font-medium hover:text-primary py-2 lg:py-0"
+                href="#features"
+              >
+                Features
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="text-sm font-medium hover:text-primary py-2 lg:py-0"
+                href="#pricing"
+              >
+                Pricing
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="text-sm font-medium hover:text-primary py-2 lg:py-0"
+                href="#faq"
+              >
+                FAQ
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="text-sm font-medium hover:text-primary py-2 lg:py-0"
+                href="#contact"
+              >
+                Contact us
+              </Link>
+            </li>
+            <li className="block lg:hidden">
+              <Link
+                className="text-white bg-[#6366f1] p-2 pl-3 pr-3 rounded-xl"
+                href="/login"
+              >
+                Login
+              </Link>
+            </li>
+          </ul>
         </nav>
+
+        {/* Login Button (Visible on large screens) */}
         <Link
-          className="text-white bg-[#6366f1] p-2 pl-3 pr-3 rounded-xl"
+          className="hidden lg:block text-white bg-[#6366f1] p-2 pl-3 pr-3 rounded-xl"
           href="/login"
         >
-          {loading ? <Spinner className="w-4 h-4 mr-2" /> : "Login"}
+          Login
         </Link>
       </header>
+
       <main className="flex-1">
+        {/* First Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-r from-primary to-primary-dark bg-[#334155]">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-white">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white leading-tight">
                     Your All-in-One Productivity Solution
                   </h1>
-                  <p className="max-w-[600px] text-gray-200 md:text-xl">
+                  <p className="text-gray-200 md:text-xl max-w-[600px]">
                     Manage tasks, take notes, and track finances seamlessly with
                     ProductivityPro. Boost your efficiency today!
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <div className="flex flex-col gap-2 sm:flex-row">
                   <Button
                     variant="outline"
                     size="lg"
-                    className="text-black bg-white border-none hover:bg-grey-200 hover:text-primary  rounded-lg"
+                    className="text-black bg-white border-none hover:bg-grey-200 hover:text-primary rounded-lg"
                   >
                     Get started
                   </Button>
@@ -152,12 +203,13 @@ export default function EnhancedMarketingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
+                  {/* Image is larger on small screens now */}
                   <Image
                     alt="ProductivityPro App"
                     src="https://res.cloudinary.com/dzuu1kacl/image/upload/v1725829250/frontly_and_3_more_pages_-_Personal_-_Microsoft_Edge_08_09_2024_23_53_08_kv4urv.png"
                     width={2000}
                     height={1442}
-                    className="w-[40rem] max-w-[48rem] rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
+                    className="w-full max-w-[25rem] sm:max-w-[30rem] md:max-w-[35rem] lg:max-w-[40rem] xl:max-w-[48rem] rounded-xl shadow-xl ring-1 ring-gray-400/10"
                   />
                 </motion.div>
               </div>
@@ -300,7 +352,7 @@ export default function EnhancedMarketingPage() {
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t text-black bg-white">
         <p className="text-xs text-muted-foreground">
-          © 2023 ProductivityPro. All rights reserved.
+          © 2024 frontly. All rights reserved.
         </p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link className="text-xs hover:underline underline-offset-4" href="#">

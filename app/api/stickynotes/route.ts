@@ -73,9 +73,24 @@ export async function PUT(request: NextRequest) {
 
     const { id, content, tags } = await request.json();
     const collection = await connectToDatabase();
+
+    // Fetch the existing note from the database
+    const existingNote = await collection.findOne({
+      _id: new ObjectId(id),
+      email: session.user.email,
+    });
+
+    if (!existingNote) {
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    }
+
+    // Use existing tags if new tags are not provided
+    const updatedTags = tags !== undefined ? tags : existingNote.tags;
+
+    // Update the note content and tags
     const result = await collection.updateOne(
       { _id: new ObjectId(id), email: session.user.email },
-      { $set: { content, tags, updatedAt: new Date() } }
+      { $set: { content, tags: updatedTags, updatedAt: new Date() } }
     );
 
     if (result.matchedCount === 0) {

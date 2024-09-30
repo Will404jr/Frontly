@@ -130,26 +130,26 @@ export default function Finance() {
   ).toFixed(2);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-8 text-black">
+    <div className="max-w-4xl mx-auto p-2 sm:p-4 space-y-4 sm:space-y-8 text-black">
       {loading && (
         <div className="text-center text-gray-500">{loadingMessage}</div>
       )}
 
       <Card className="mx-auto shadow-lg w-full bg-slate-50">
-        <CardHeader className="bg-blue-600 text-white p-4 rounded-t-lg">
-          <CardTitle className="text-lg font-semibold">
+        <CardHeader className="bg-blue-600 text-white p-3 sm:p-4 rounded-t-lg">
+          <CardTitle className="text-base sm:text-lg font-semibold">
             Add New Transaction
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-6 space-y-6">
-          <form onSubmit={addTransaction} className="space-y-4">
-            <div className="flex space-x-4">
+        <CardContent className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+          <form onSubmit={addTransaction} className="space-y-3 sm:space-y-4">
+            <div className="flex space-x-2 sm:space-x-4">
               <select
                 value={type}
                 onChange={(e) =>
                   setType(e.target.value as "income" | "expense")
                 }
-                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="block w-full py-1 sm:py-2 px-2 sm:px-3 text-sm sm:text-base border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
@@ -161,7 +161,7 @@ export default function Finance() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              className="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full py-1 sm:py-2 px-2 sm:px-3 text-sm sm:text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
             <Input
               type="text"
@@ -169,60 +169,65 @@ export default function Finance() {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
-              className="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full py-1 sm:py-2 px-2 sm:px-3 text-sm sm:text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
             <Input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
-              className="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full py-1 sm:py-2 px-2 sm:px-3 text-sm sm:text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
             <Button
               type="submit"
-              className="w-full bg-[#03addc] hover:bg-[#03addc] text-black py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#03addc] focus:ring-opacity-50"
+              className="w-full bg-[#03addc] hover:bg-[#03addc] text-black py-1 sm:py-2 px-3 sm:px-4 text-sm sm:text-base rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#03addc] focus:ring-opacity-50"
               disabled={loading}
             >
-              <Plus className="mr-2 h-4 w-4" /> Add Transaction
+              <Plus className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" /> Add
+              Transaction
             </Button>
           </form>
         </CardContent>
       </Card>
 
       {/* Cards for totals */}
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+      <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-3">
         <Card className="bg-slate-50">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">
+              Total Income
+            </CardTitle>
+            <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-lg sm:text-2xl font-bold text-green-600">
               shs.{calculateTotal("income")}
             </div>
           </CardContent>
         </Card>
         <Card className="bg-slate-50">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">
               Total Expenses
             </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-lg sm:text-2xl font-bold text-red-600">
               shs.{calculateTotal("expense")}
             </div>
           </CardContent>
         </Card>
         <Card className="bg-slate-50">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Balance</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">
+              Balance
+            </CardTitle>
+            <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div
-              className={`text-2xl font-bold ${
+              className={`text-lg sm:text-2xl font-bold ${
                 parseFloat(balance) >= 0 ? "text-blue-600" : "text-red-600"
               }`}
             >
@@ -235,39 +240,52 @@ export default function Finance() {
       {/* Recent transactions */}
       <Card className="bg-slate-50">
         <CardHeader>
-          <CardTitle>Recent Transactions</CardTitle>
+          <CardTitle className="text-base sm:text-lg">
+            Recent Transactions
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-xs sm:text-sm">Date</TableHead>
+                <TableHead className="text-xs sm:text-sm">Type</TableHead>
+                <TableHead className="text-xs sm:text-sm">Category</TableHead>
+                <TableHead className="text-xs sm:text-sm text-right">
+                  Amount
+                </TableHead>
+                <TableHead className="text-xs sm:text-sm text-right">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {transactions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-gray-500">
+                  <TableCell
+                    colSpan={5}
+                    className="text-center text-gray-500 text-xs sm:text-sm"
+                  >
                     No transactions available.
                   </TableCell>
                 </TableRow>
               ) : (
                 transactions.map((transaction) => (
                   <TableRow key={transaction._id}>
-                    <TableCell>{transaction.date}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">
+                      {transaction.date}
+                    </TableCell>
                     <TableCell>
                       {transaction.type === "income" ? (
-                        <TrendingUp className="text-green-600" />
+                        <TrendingUp className="text-green-600 h-3 w-3 sm:h-4 sm:w-4" />
                       ) : (
-                        <TrendingDown className="text-red-600" />
+                        <TrendingDown className="text-red-600 h-3 w-3 sm:h-4 sm:w-4" />
                       )}
                     </TableCell>
-                    <TableCell>{transaction.category}</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-xs sm:text-sm">
+                      {transaction.category}
+                    </TableCell>
+                    <TableCell className="text-xs sm:text-sm text-right">
                       shs.{transaction.amount.toFixed(2)}
                     </TableCell>
                     <TableCell className="text-right">
@@ -276,9 +294,9 @@ export default function Finance() {
                         size="icon"
                         onClick={() => deleteTransaction(transaction._id)}
                         disabled={loading}
-                        className="bg-red-600 border-none"
+                        className="bg-red-600 border-none p-1 sm:p-2"
                       >
-                        <Trash2 className="h-4 w-4 text-white" />
+                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                       </Button>
                     </TableCell>
                   </TableRow>

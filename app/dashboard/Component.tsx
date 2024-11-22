@@ -115,6 +115,18 @@ export default function Component({ children }: { children: React.ReactNode }) {
                 <BarChartIcon className="h-5 w-5" />
                 Finance
               </Link>
+              <Link
+                href="/dashboard/journal"
+                onClick={() => handleMenuItemClick("journal")}
+                className={`flex items-center text-white gap-2 px-3 py-2 text-sm font-medium transition-transform hover:text-lg hover:bg-muted hover:text-black hover:text-foreground ${
+                  activeMenuItem === "journal"
+                    ? "bg-[#6366f1] text-black rounded-xl"
+                    : "rounded-md"
+                }`}
+              >
+                <CalendarIcon className="h-5 w-5" />
+                Journal
+              </Link>
             </nav>
           </div>
 

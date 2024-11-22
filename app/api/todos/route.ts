@@ -1,72 +1,81 @@
-import { NextResponse } from "next/server";
-import clientPromise from "@/lib/MongodbClient";
-import { getServerSession } from "next-auth"; // Import getServerSession
-import { authOptions } from "@/lib/authOptions"; // Import your authOptions
+// // route.ts
 
-// Create a new todo
-export async function POST(request: Request) {
-  try {
-    const session = await getServerSession(authOptions);
+// import { NextResponse } from "next/server";
+// import clientPromise from "@/lib/MongodbClient";
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "@/lib/authOptions";
 
-    // Ensure user is logged in
-    if (!session || !session.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+// // Create a new todo
+// export async function POST(request: Request) {
+//   try {
+//     const session = await getServerSession(authOptions);
 
-    const { text, date } = await request.json();
+//     // Ensure user is logged in
+//     if (!session || !session.user?.email) {
+//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+//     }
 
-    // Validate input
-    if (!text || !date) {
-      return NextResponse.json(
-        { error: "Text and date are required" },
-        { status: 400 }
-      );
-    }
+//     const { text, date, time, priority } = await request.json();
 
-    // Connect to the database
-    const client = await clientPromise;
-    const db = client.db("Next-app");
+//     // Validate input
+//     if (!text || !date || !priority) {
+//       return NextResponse.json(
+//         { error: "Text, date, and priority are required" },
+//         { status: 400 }
+//       );
+//     }
 
-    // Insert the new todo into the "todos" collection with user's email
-    const result = await db.collection("todos").insertOne({
-      email: session.user.email,
-      text,
-      date,
-      completed: false,
-      createdAt: new Date(),
-    });
+//     // Connect to the database
+//     const client = await clientPromise;
+//     const db = client.db("Next-app");
 
-    return NextResponse.json(
-      {
-        message: "Todo saved successfully",
-        todoId: result.insertedId,
-      },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Failed to save todo:", error);
-    return NextResponse.json({ error: "Failed to save todo" }, { status: 500 });
-  }
-}
+//     // Insert the new todo
+//     const result = await db.collection("todos").insertOne({
+//       email: session.user.email,
+//       text,
+//       date,
+//       time: time || null,
+//       priority,
+//       completed: false,
+//       createdAt: new Date(),
+//     });
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const date = searchParams.get("date");
+//     return NextResponse.json(
+//       {
+//         message: "Todo saved successfully",
+//         todoId: result.insertedId,
+//       },
+//       { status: 201 }
+//     );
+//   } catch (error) {
+//     console.error("Failed to save todo:", error);
+//     return NextResponse.json({ error: "Failed to save todo" }, { status: 500 });
+//   }
+// }
 
-  if (!date) {
-    return NextResponse.json({ error: "Date is required" }, { status: 400 });
-  }
 
-  try {
-    const client = await clientPromise;
-    const db = client.db("Next-app");
-    const todos = await db.collection("todos").find({ date }).toArray();
+// export async function GET(req: Request) {
+//   const { searchParams } = new URL(req.url);
+//   const date = searchParams.get("date");
+//   const completed = searchParams.get("completed");
 
-    return NextResponse.json({ todos }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch todos" },
-      { status: 500 }
-    );
-  }
-}
+//   if (!date) {
+//     return NextResponse.json({ error: "Date is required" }, { status: 400 });
+//   }
+
+//   try {
+//     const client = await clientPromise;
+//     const db = client.db("Next-app");
+
+//     // Create a filter object based on query parameters
+//     const filter: any = { date };
+//     if (completed) filter.completed = completed === "true";
+
+//     const todos = await db.collection("todos").find(filter).toArray();
+
+//     return NextResponse.json({ todos }, { status: 200 });
+//   } catch (error) {
+//     console.error("Failed to fetch todos:", error);
+//     return NextResponse.json({ error: "Failed to fetch todos" }, { status: 500 });
+//   }
+// }

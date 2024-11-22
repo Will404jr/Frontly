@@ -33,6 +33,7 @@ export default function OrganizedFlexibleStickyNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNoteContent, setNewNoteContent] = useState("");
   const [newNoteTags, setNewNoteTags] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const textAreaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>(
     {}
@@ -64,7 +65,7 @@ export default function OrganizedFlexibleStickyNotes() {
         tags: newNoteTags
           .split(",")
           .map((tag) => tag.trim())
-          .filter((tag) => tag !== ""), // Ensure tags are properly formatted
+          .filter((tag) => tag !== ""),
       };
 
       try {
@@ -142,12 +143,12 @@ export default function OrganizedFlexibleStickyNotes() {
   };
 
   const handleFocus = (id: string, content: string) => {
-    noteContentBackup.current[id] = content; // Store original content on focus
+    noteContentBackup.current[id] = content;
   };
 
   const handleBlur = (id: string, content: string) => {
     if (content !== noteContentBackup.current[id]) {
-      updateNote(id, content); // Update note only if content changed
+      updateNote(id, content);
     }
   };
 
@@ -155,10 +156,22 @@ export default function OrganizedFlexibleStickyNotes() {
     notes.forEach((note) => adjustTextareaHeight(note._id));
   }, [notes]);
 
+  const filteredNotes = notes.filter((note) =>
+    note.tags.some((tag) =>
+      tag.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   return (
     <div className="container mx-auto p-4">
-      {/* <h1 className="text-2xl font-bold mb-4 text-black">Sticky Wall</h1> */}
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between">
+        <Input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search by tags"
+          className="w-full sm:w-auto mr-4"
+        />
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto text-white bg-[#6366f1] hover:bg-[#334155] rounded-xl">
@@ -213,7 +226,7 @@ export default function OrganizedFlexibleStickyNotes() {
         </Dialog>
       </div>
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 text-black">
-        {notes.map((note) => (
+        {filteredNotes.map((note) => (
           <div
             key={note._id}
             className={`${note.color} p-4 rounded-lg shadow-md relative flex flex-col mb-4 break-inside-avoid`}

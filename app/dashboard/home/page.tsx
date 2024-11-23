@@ -10,8 +10,6 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import News from "../../components/news";
-import Finance from "../../components/finance";
-import NotesDisplay from "../../components/notesDisplay";
 
 const Home = () => {
   const [todos, setTodos] = useState<any[]>([]);
@@ -53,7 +51,7 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <Link href="/dashboard/financeTracker">
+      {/* <Link href="/dashboard/financeTracker">
         <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black">
           <CardHeader>
             <CardTitle>Finance</CardTitle>
@@ -65,10 +63,10 @@ const Home = () => {
             <Finance />
           </CardContent>
         </Card>
-      </Link>
+      </Link> */}
 
       {/* Wrap the Card with Link for To-Do navigation */}
-      <Link href="/dashboard/todo">
+      {/* <Link href="/dashboard/todo">
         <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black cursor-pointer">
           <CardHeader>
             <CardTitle>To-Do List</CardTitle>
@@ -101,10 +99,10 @@ const Home = () => {
             )}
           </CardContent>
         </Card>
-      </Link>
+      </Link> */}
 
       {/* Wrap the Card with Link for Stickies navigation */}
-      <Link href="/dashboard/notes">
+      {/* <Link href="/dashboard/notes">
         <Card className="bg-slate-50 overflow-y-auto h-42 mb-5 text-black cursor-pointer">
           <CardHeader>
             <CardTitle>Stickies</CardTitle>
@@ -114,7 +112,7 @@ const Home = () => {
             <NotesDisplay />
           </CardContent>
         </Card>
-      </Link>
+      </Link> */}
     </div>
   );
 };

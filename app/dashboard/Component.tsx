@@ -79,7 +79,7 @@ export default function Component({ children }: { children: React.ReactNode }) {
                 <HomeIcon className="h-5 w-5" />
                 Home
               </Link>
-              <Link
+              {/* <Link
                 href="/dashboard/todo"
                 onClick={() => handleMenuItemClick("todo")}
                 className={`flex items-center text-white gap-2 px-3 py-2 text-sm font-medium transition-transform hover:text-lg hover:bg-muted hover:text-black hover:text-foreground ${
@@ -90,7 +90,7 @@ export default function Component({ children }: { children: React.ReactNode }) {
               >
                 <LayoutGridIcon className="h-5 w-5" />
                 Todos
-              </Link>
+              </Link> */}
               <Link
                 href="/dashboard/notes"
                 onClick={() => handleMenuItemClick("notes")}

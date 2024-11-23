@@ -44,10 +44,12 @@ export async function PUT(
     return NextResponse.json({ message: "Todo updated successfully" });
   } catch (error) {
     console.error("Failed to update todo:", error);
-    return NextResponse.json({ error: "Failed to update todo" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to update todo" },
+      { status: 500 }
+    );
   }
 }
-
 
 // Delete a todo
 export async function DELETE(
@@ -62,7 +64,9 @@ export async function DELETE(
     const db = client.db("Next-app");
 
     // Delete the todo
-    const result = await db.collection("todos").deleteOne({ _id: new ObjectId(id) });
+    const result = await db
+      .collection("todos")
+      .deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
       return NextResponse.json({ error: "Todo not found" }, { status: 404 });
@@ -71,6 +75,9 @@ export async function DELETE(
     return NextResponse.json({ message: "Todo deleted successfully" });
   } catch (error) {
     console.error("Failed to delete todo:", error);
-    return NextResponse.json({ error: "Failed to delete todo" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to delete todo" },
+      { status: 500 }
+    );
   }
 }

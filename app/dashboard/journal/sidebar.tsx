@@ -17,7 +17,7 @@ export function Sidebar({
   onSelectEntry,
 }: SidebarProps) {
   return (
-    <div className="w-80 border-l bg-white">
+    <div className="w-[250px] border-l bg-white">
       <ScrollArea className="h-screen">
         <div className="p-4">
           <h2 className="font-semibold text-gray-500 mb-4">Journal Entries</h2>
